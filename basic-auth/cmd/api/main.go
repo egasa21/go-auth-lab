@@ -9,6 +9,7 @@ import (
 	"github.com/egasa21/go-auth-lab/basic-auth/internal/httpapi"
 	"github.com/egasa21/go-auth-lab/basic-auth/internal/user"
 	_ "github.com/jackc/pgx/v5/stdlib"
+	"github.com/pressly/goose/v3"
 )
 
 func main() {
@@ -19,6 +20,14 @@ func main() {
 	}
 
 	defer db.Close()
+
+	if err := goose.SetDialect("postgres"); err != nil {
+		panic(err)
+	}
+
+	if err := goose.Up(db, "migrations"); err != nil {
+		panic(err)
+	}
 
 	store := user.NewStore(db)
 
