@@ -14,7 +14,7 @@ func NewStore(db *sql.DB) *Store {
 	return &Store{db: db}
 }
 
-func (s *Store) Create(ctx context.Context, u User) error {
+func (s *Store) Create(ctx context.Context, u User) (User, error) {
 	query := `
 			INSERT INTO users (username, password_hash) 
 			VALUES ($1, $2)
@@ -28,8 +28,8 @@ func (s *Store) Create(ctx context.Context, u User) error {
 
 	if err != nil {
 		log.Printf("Create user error: %v", err)
-		return err
+		return u, err
 	}
 
-	return nil
+	return u, err
 }
